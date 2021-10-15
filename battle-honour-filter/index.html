@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+	<title>Battle Honours Filter</title>
+	<meta charset="utf-8">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" 
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+		crossorigin="anonymous">
+	<style>
+
+	</style>
+</head>
+
+<body>
+	
+	<nav class="navbar navbar-light bg-light">
+		<span class="navbar-brand mb-2 h1">Battle Honours</span>
+	</nav>
+	
+	<div id="app">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md-4 form-group">
+					<label for="faction">Pick Your Faction</label>
+					<select id="faction" class="form-control" v-model="faction" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Imperial Fists</option>
+						<option>Blood Angels</option>
+						<option>Orks</option>
+						<option>Necrons</option>
+					</select>
+				</div>
+				
+				<div class="col-12 col-md-4 form-group">
+					<label for="unitType">Select Unit Type</label>
+					<select id="unitType" class="form-control" v-model="unitType" v-on:change="clearDisplay" data-bs-toggle="tooltip" data-bs-placement="right" title="Character Vehicles choose Vehicle, same for Monsters">
+						<option disabled value="">Please select one</option>
+						<option>Character</option>
+						<option>Vehicle</option>
+						<option>Monster</option>
+						<option>Other</option>
+					</select>
+				</div>
+				
+				<div class="col-12 col-md-4 form-check">
+					<label for="isPsyker">Is Unit A Psyker</label>
+					<select id="isPsyker" class="form-control" v-model="isPsyker" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Yes</option>
+						<option>No</option>
+					</select>
+				</div>
+				
+				<div v-if="isMachineSpirit" class="col-12 col-md-4 form-check">
+					<label for="machineSpirit">Is This A Machine Spirit Vehicle?</label>
+					<select id="machineSpirit" class="form-control" v-model="machineSpirit" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Yes</option>
+						<option>No</option>
+					</select>
+				</div>
+				
+				<div v-if="isSMSpecialist" class="col-12 col-md-4 form-check">
+					<label for="SMSpecialist">Is This Marine An Officer</label>
+					<select id="SMSpecialist" class="form-control" v-model="SMSpecialist" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Captain</option>
+						<option>Apothecary</option>
+						<option>Techmarine</option>
+						<option>Other</option>
+					</select>
+				</div>
+				
+				<div v-if="isSquigCavalry" class="col-12 col-md-4 form-check">
+					<label for="squigCavalry">Is This A Squig Cavalry Unit?</label>
+					<select id="squigCavalry" class="form-control" v-model="squigCavalry" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Yes</option>
+						<option>No</option>
+					</select>
+				</div>
+				
+				<div v-if="isOrkOddboy" class="col-12 col-md-4 form-check">
+					<label for="orkOddboy">Is This Ork An Oddboy?</label>
+					<select id="orkOddboy" class="form-control" v-model="orkOddboy" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Mek/Big Mek</option>
+						<option>Painboy</option>
+						<option>Other</option>
+					</select>
+				</div>
+				
+				<div v-if="isMobUnit" class="col-12 col-md-4 form-check">
+					<label for="mobUnit">Is This A Mob Unit?</label>
+					<select id="mobUnit" class="form-control" v-model="mobUnit" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Yes</option>
+						<option>No</option>
+					</select>
+				</div>
+				
+				<div v-if="isNecronOfficer" class="col-12 col-md-4 form-check">
+					<label for="necronOfficer">Is This Necron A Noble or Cryptek?</label>
+					<select id="necronOfficer" class="form-control" v-model="necronOfficer" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Noble</option>
+						<option>Cryptek</option>
+						<option>Other</option>
+					</select>
+				</div>
+				
+				<div v-if="isCanoptekUnit" class="col-12 col-md-4 form-check">
+					<label for="canoptekUnit">Is This A Canoptek Unit?</label>
+					<select id="canoptekUnit" class="form-control" v-model="canoptekUnit" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Yes</option>
+						<option>No</option>
+					</select>
+				</div>
+				
+				<div v-if="isCoreNecronUnit" class="col-12 col-md-4 form-check">
+					<label for="coreNecronUnit">Is This A Core Unit?</label>
+					<select id="coreNecronUnit" class="form-control" v-model="coreNecronUnit" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Yes</option>
+						<option>No</option>
+					</select>
+				</div>
+				
+				<div class="col-12 col-md-4 form-group">
+					<label for="selectHonour">What Honour Do You Wish To See</label>
+					<select id="selectHonour" class="form-control" v-model="selectHonour" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Battle Traits</option>
+						<option>Weapon Enhancements</option>
+						<option v-if="isPsychicFortitude">Psychic Fortitudes</option>
+						<option v-if="isCrusadeRelics">Crusade Relics</option>
+						<option v-if="isHonorifics">Honorifics</option>
+					</select>
+				</div>
+				
+				<div v-if="whatRank" class="col-12 col-md-4 form-check">
+					<label for="characterRank">What Rank Is The Character</label>
+					<select id="characterRank" class="form-control" v-model="characterRank" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Legendary</option>
+						<option>Heroic</option>
+						<option>Battle-hardened or below</option>
+					</select>
+				</div>
+
+				<div v-if="whatWeaponType" class="col-12 col-md-4 form-check">
+					<label for="weaponType">Is This A Ranged Or Melee Weapon</label>
+					<select id="weaponType" class="form-control" v-model="weaponType" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Ranged</option>
+						<option>Melee</option>
+						<option>Both</option>
+					</select>
+				</div>
+
+				<div v-if="isNecronWeapon" class="col-12 col-md-4 form-check">
+					<label for="necronWeapon">Is The Weapon Gauss Or Tesla</label>
+					<select id="necronWeapon" class="form-control" v-model="necronWeapon" v-on:change="clearDisplay">
+						<option disabled value="">Please select one</option>
+						<option>Gauss</option>
+						<option>Tesla</option>
+						<option>Other</option>
+					</select>
+				</div>
+
+			</div>
+			
+			<div class="row">
+				<div class="col-12">
+					<button v-if="optionsMet" v-on:click="displayHonours" type="button" class="btn btn-primary mb-2">Show Me!</button>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-12 col-md-8">
+					<h2>{{ displayHeader }}</h2>
+					<p>{{ displayParagraph }}</p>
+					<ul>
+						<li class="mb-1" v-for="option in displayList">
+							{{ option }}
+						</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	<script src="database.js"></script>
+	<script src="engine.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
+		crossorigin="anonymous"></script>
+	<script>
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+			return new bootstrap.Tooltip(tooltipTriggerEl)
+		})
+	</script>
+</body>
+</html>
